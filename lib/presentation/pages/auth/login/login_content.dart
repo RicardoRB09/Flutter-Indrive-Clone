@@ -17,7 +17,18 @@ class LoginContent extends StatelessWidget {
         Container(
           width: screenWidth,
           height: screenHeight,
-          color: const Color(0XFFCECECE),
+          // color: const Color(0XFFCECECE),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.center,
+              end: Alignment.center,
+              // stops: const [0.2, 0.9],
+              colors: [
+                darkGrey,
+                lightGrey,
+              ],
+            ),
+          ),
           padding: const EdgeInsets.only(left: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -25,7 +36,7 @@ class LoginContent extends StatelessWidget {
             children: [
               _textLoginRotated(),
               const SizedBox(height: 56),
-              _textRegisterRotated(),
+              _textRegisterRotated(context),
             ],
           ),
         ),
@@ -34,9 +45,9 @@ class LoginContent extends StatelessWidget {
           decoration: BoxDecoration(
             // color: darkGrey,
             gradient: LinearGradient(
-              begin: Alignment.bottomRight,
-              end: Alignment.topCenter,
-              stops: const [0.2, 0.9],
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              stops: const [0.1, 0.9],
               colors: [
                 darkGrey,
                 lightGrey,
@@ -49,33 +60,38 @@ class LoginContent extends StatelessWidget {
           ),
           child: Container(
             margin: const EdgeInsets.only(left: 24, right: 24, top: 64),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _textWelcome('Welcome'),
-                _textWelcome('back!'),
-                const SizedBox(height: 32),
-                _imageCar(),
-                const SizedBox(height: 24),
-                _textLogin(),
-                const SizedBox(height: 24),
-                const CustomTextField(
-                  text: 'Email',
-                  icon: Icons.email_outlined,
-                ),
-                const SizedBox(height: 24),
-                const CustomTextField(
-                  text: 'Password',
-                  icon: Icons.lock_outline,
-                ),
-                const Spacer(),
-                const CustomButton(text: 'SIGN IN'),
-                const SizedBox(height: 8),
-                _textOr(),
-                const SizedBox(height: 8),
-                _textDontHaveAccount(),
-                const SizedBox(height: 16),
-              ],
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _textWelcome('Welcome'),
+                  _textWelcome('back!'),
+                  const SizedBox(height: 32),
+                  _imageCar(),
+                  const SizedBox(height: 24),
+                  _textLogin(),
+                  const SizedBox(height: 24),
+                  const CustomTextField(
+                    text: 'Email',
+                    icon: Icons.email_outlined,
+                  ),
+                  const SizedBox(height: 24),
+                  const CustomTextField(
+                    text: 'Password',
+                    icon: Icons.lock_outline,
+                  ),
+                  // const Spacer(),
+                  SizedBox(
+                    height: screenHeight * 0.2,
+                  ),
+                  const CustomButton(text: 'SIGN IN'),
+                  const SizedBox(height: 8),
+                  _textOr(),
+                  const SizedBox(height: 8),
+                  _textDontHaveAccount(context),
+                  const SizedBox(height: 16),
+                ],
+              ),
             ),
           ),
         ),
@@ -83,23 +99,28 @@ class LoginContent extends StatelessWidget {
     );
   }
 
-  Widget _textDontHaveAccount() {
-    return const Row(
+  Widget _textDontHaveAccount(BuildContext context) {
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           'Dont have an account? ',
           style: TextStyle(
             fontSize: 12,
             color: Color(0XFFCECECE),
           ),
         ),
-        Text(
-          'Register',
-          style: TextStyle(
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
-            color: Color(0XFFCECECE),
+        GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, 'register');
+          },
+          child: const Text(
+            'Register',
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.bold,
+              color: Color(0XFFCECECE),
+            ),
           ),
         ),
       ],
@@ -144,11 +165,11 @@ class LoginContent extends StatelessWidget {
   }
 
   Widget _imageCar() {
-    return Container(
-      alignment: Alignment.centerRight,
+    return SizedBox(
+      // alignment: Alignment.centerRight,
       width: double.infinity,
       height: 176,
-      child: Image.asset('assets/img/car.png'),
+      child: Image.asset('assets/img/car_white.png'),
     );
   }
 
@@ -169,7 +190,8 @@ class LoginContent extends StatelessWidget {
       child: Text(
         'Login',
         style: TextStyle(
-          color: Color(0xFF4B4B4B),
+          // color: Color(0xFF4B4B4B),
+          color: Color(0XFFCECECE),
           fontSize: 24,
           fontWeight: FontWeight.bold,
         ),
@@ -177,15 +199,21 @@ class LoginContent extends StatelessWidget {
     );
   }
 
-  Widget _textRegisterRotated() {
-    return const RotatedBox(
-      quarterTurns: 1,
-      child: Text(
-        'Register',
-        style: TextStyle(
-          color: Color(0xFF4B4B4B),
-          fontSize: 24,
-          // fontWeight: FontWeight.bold,
+  Widget _textRegisterRotated(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, 'register');
+      },
+      child: const RotatedBox(
+        quarterTurns: 1,
+        child: Text(
+          'Register',
+          style: TextStyle(
+            // color: Color(0xFF4B4B4B),
+            color: const Color(0XFFCECECE),
+            fontSize: 24,
+            // fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
