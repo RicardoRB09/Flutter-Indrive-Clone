@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField(
-      {super.key,
-      required this.text,
-      required this.icon,
-      this.margin = EdgeInsets.zero});
+  const CustomTextField({
+    super.key,
+    required this.text,
+    required this.icon,
+    this.margin = EdgeInsets.zero,
+    required this.onChanged,
+  });
 
   final String text;
   final IconData icon;
   final EdgeInsetsGeometry margin;
+  final Function(String text) onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +33,7 @@ class CustomTextField extends StatelessWidget {
             size: 20,
           ),
         ),
+        onChanged: onChanged,
       ),
     );
   }

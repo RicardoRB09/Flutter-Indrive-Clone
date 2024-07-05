@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:indriver_clone/presentation/pages/auth/login/bloc/login_bloc.dart';
+import 'package:indriver_clone/presentation/pages/auth/login/bloc/login_event.dart';
 import 'package:indriver_clone/presentation/widgets/custom_button.dart';
 import 'package:indriver_clone/presentation/widgets/custom_text_field.dart';
 
 class LoginContent extends StatelessWidget {
-  const LoginContent({super.key});
+  const LoginContent({this.bloc, super.key});
+
+  final LoginBloc? bloc;
 
   @override
   Widget build(BuildContext context) {
@@ -12,90 +16,104 @@ class LoginContent extends StatelessWidget {
     Color darkGrey = const Color(0xFF4B4B4B);
     Color lightGrey = const Color(0XFFCECECE);
 
-    return Stack(
-      children: [
-        Container(
-          width: screenWidth,
-          height: screenHeight,
-          // color: const Color(0XFFCECECE),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.center,
-              end: Alignment.center,
-              // stops: const [0.2, 0.9],
-              colors: [
-                darkGrey,
-                lightGrey,
-              ],
-            ),
-          ),
-          padding: const EdgeInsets.only(left: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _textLoginRotated(),
-              const SizedBox(height: 56),
-              _textRegisterRotated(context),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 64, bottom: 48),
-          decoration: BoxDecoration(
-            // color: darkGrey,
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              stops: const [0.1, 0.9],
-              colors: [
-                darkGrey,
-                lightGrey,
-              ],
-            ),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(40),
-              bottomLeft: Radius.circular(40),
-            ),
-          ),
-          child: Container(
-            margin: const EdgeInsets.only(left: 24, right: 24, top: 64),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _textWelcome('Welcome'),
-                  _textWelcome('back!'),
-                  const SizedBox(height: 32),
-                  _imageCar(),
-                  const SizedBox(height: 24),
-                  _textLogin(),
-                  const SizedBox(height: 24),
-                  const CustomTextField(
-                    text: 'Email',
-                    icon: Icons.email_outlined,
-                  ),
-                  const SizedBox(height: 24),
-                  const CustomTextField(
-                    text: 'Password',
-                    icon: Icons.lock_outline,
-                  ),
-                  // const Spacer(),
-                  SizedBox(
-                    height: screenHeight * 0.2,
-                  ),
-                  const CustomButton(text: 'SIGN IN'),
-                  const SizedBox(height: 8),
-                  _textOr(),
-                  const SizedBox(height: 8),
-                  _textDontHaveAccount(context),
-                  const SizedBox(height: 16),
+    return Form(
+      key: bloc?.state.formKey,
+      child: Stack(
+        children: [
+          Container(
+            width: screenWidth,
+            height: screenHeight,
+            // color: const Color(0XFFCECECE),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.center,
+                end: Alignment.center,
+                // stops: const [0.2, 0.9],
+                colors: [
+                  darkGrey,
+                  lightGrey,
                 ],
               ),
             ),
+            padding: const EdgeInsets.only(left: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _textLoginRotated(),
+                const SizedBox(height: 56),
+                _textRegisterRotated(context),
+              ],
+            ),
           ),
-        ),
-      ],
+          Container(
+            margin: const EdgeInsets.only(left: 64, bottom: 48),
+            decoration: BoxDecoration(
+              // color: darkGrey,
+              gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: const [0.1, 0.9],
+                colors: [
+                  darkGrey,
+                  lightGrey,
+                ],
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(40),
+                bottomLeft: Radius.circular(40),
+              ),
+            ),
+            child: Container(
+              margin: const EdgeInsets.only(left: 24, right: 24, top: 64),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _textWelcome('Welcome'),
+                    _textWelcome('back!'),
+                    const SizedBox(height: 32),
+                    _imageCar(),
+                    const SizedBox(height: 24),
+                    _textLogin(),
+                    const SizedBox(height: 24),
+                    CustomTextField(
+                      text: 'Email',
+                      icon: Icons.email_outlined,
+                      onChanged: (text) {
+                        bloc?.add(EmailChanged(email: text));
+                      },
+                    ),
+                    const SizedBox(height: 24),
+                    CustomTextField(
+                      text: 'Password',
+                      icon: Icons.lock_outline,
+                      onChanged: (text) {
+                        bloc?.add(PasswordChanged(password: text));
+                      },
+                    ),
+                    // const Spacer(),
+                    SizedBox(
+                      height: screenHeight * 0.2,
+                    ),
+                    CustomButton(
+                      text: 'SIGN IN',
+                      onPressed: () {
+                        bloc?.add(FormSubmit());
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    _textOr(),
+                    const SizedBox(height: 8),
+                    _textDontHaveAccount(context),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -210,7 +228,7 @@ class LoginContent extends StatelessWidget {
           'Register',
           style: TextStyle(
             // color: Color(0xFF4B4B4B),
-            color: const Color(0XFFCECECE),
+            color: Color(0XFFCECECE),
             fontSize: 24,
             // fontWeight: FontWeight.bold,
           ),
