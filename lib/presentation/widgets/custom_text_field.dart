@@ -7,12 +7,14 @@ class CustomTextField extends StatelessWidget {
     required this.icon,
     this.margin = EdgeInsets.zero,
     required this.onChanged,
+    this.validator,
   });
 
   final String text;
   final IconData icon;
   final EdgeInsetsGeometry margin;
   final Function(String text) onChanged;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +36,7 @@ class CustomTextField extends StatelessWidget {
           ),
         ),
         onChanged: onChanged,
+        validator: validator,
       ),
     );
   }

@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:indriver_clone/presentation/pages/auth/login/bloc/login_bloc.dart';
 import 'package:indriver_clone/presentation/pages/auth/login/bloc/login_event.dart';
+import 'package:indriver_clone/presentation/pages/auth/login/bloc/login_state.dart';
+import 'package:indriver_clone/presentation/utils/bloc_form_item.dart';
 import 'package:indriver_clone/presentation/widgets/custom_button.dart';
 import 'package:indriver_clone/presentation/widgets/custom_text_field.dart';
 
 class LoginContent extends StatelessWidget {
-  const LoginContent({this.bloc, super.key});
+  const LoginContent({this.state, super.key});
 
-  final LoginBloc? bloc;
+  final LoginState? state;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +20,7 @@ class LoginContent extends StatelessWidget {
     Color lightGrey = const Color(0XFFCECECE);
 
     return Form(
-      key: bloc?.state.formKey,
+      key: state?.formKey,
       child: Stack(
         children: [
           Container(
@@ -49,7 +52,6 @@ class LoginContent extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 64, bottom: 48),
             decoration: BoxDecoration(
-              // color: darkGrey,
               gradient: LinearGradient(
                 begin: Alignment.bottomLeft,
                 end: Alignment.topRight,
@@ -81,7 +83,12 @@ class LoginContent extends StatelessWidget {
                       text: 'Email',
                       icon: Icons.email_outlined,
                       onChanged: (text) {
-                        bloc?.add(EmailChanged(email: text));
+                        context.read<LoginBloc>().add(
+                              EmailChanged(email: BlocFormItem(value: text)),
+                            );
+                      },
+                      validator: (value) {
+                        return context.read<LoginBloc>().state.email.error;
                       },
                     ),
                     const SizedBox(height: 24),
@@ -89,7 +96,13 @@ class LoginContent extends StatelessWidget {
                       text: 'Password',
                       icon: Icons.lock_outline,
                       onChanged: (text) {
-                        bloc?.add(PasswordChanged(password: text));
+                        context.read<LoginBloc>().add(
+                              PasswordChanged(
+                                  password: BlocFormItem(value: text)),
+                            );
+                      },
+                      validator: (value) {
+                        return context.read<LoginBloc>().state.password.error;
                       },
                     ),
                     // const Spacer(),
@@ -99,7 +112,13 @@ class LoginContent extends StatelessWidget {
                     CustomButton(
                       text: 'SIGN IN',
                       onPressed: () {
-                        bloc?.add(FormSubmit());
+                        if (state!.formKey!.currentState!.validate()) {
+                          context.read<LoginBloc>().add(FormSubmit());
+                        } else {
+                          print('Form invalid');
+                        }
+
+                        context.read<LoginBloc>().add(FormSubmit());
                       },
                     ),
                     const SizedBox(height: 8),
