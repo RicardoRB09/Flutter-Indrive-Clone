@@ -227,8 +227,7 @@ class LoginContent extends StatelessWidget {
       child: Text(
         'Login',
         style: TextStyle(
-          // color: Color(0xFF4B4B4B),
-          color: Color(0XFFCECECE),
+          color: Color(0xFF4B4B4B),
           fontSize: 24,
           fontWeight: FontWeight.bold,
         ),
@@ -246,8 +245,7 @@ class LoginContent extends StatelessWidget {
         child: Text(
           'Register',
           style: TextStyle(
-            // color: Color(0xFF4B4B4B),
-            color: Color(0XFFCECECE),
+            color: Color(0xFF4B4B4B),
             fontSize: 24,
             // fontWeight: FontWeight.bold,
           ),
