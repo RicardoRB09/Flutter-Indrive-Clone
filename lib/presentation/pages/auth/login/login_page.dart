@@ -15,12 +15,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: Color(0xFF4B4B4B),
       body: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          return LoginContent(
-            state: state,
-          );
+          return LoginContent(state: state);
         },
       ),
     );

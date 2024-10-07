@@ -1,121 +1,220 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_bloc.dart';
+import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_event.dart';
+import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_state.dart';
+import 'package:indriver_clone/presentation/utils/bloc_form_item.dart';
 import 'package:indriver_clone/presentation/widgets/custom_button.dart';
 import 'package:indriver_clone/presentation/widgets/custom_text_field.dart';
 import 'package:indriver_clone/presentation/widgets/custom_text_field_outline.dart';
 
 class RegisterContent extends StatelessWidget {
-  const RegisterContent({super.key});
+  final RegisterState? state;
+
+  const RegisterContent({
+    super.key,
+    required this.state,
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
     Color darkGrey = const Color(0xFF4B4B4B);
     Color lightGrey = const Color(0XFFCECECE);
 
-    return Stack(
-      children: [
-        Container(
-          width: screenWidth,
-          height: screenHeight,
-          // color: const Color(0XFFCECECE),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.topCenter,
-              stops: const [0.2, 0.9],
-              colors: [
-                darkGrey,
-                lightGrey,
+    return Form(
+      key: state?.formKey,
+      child: Stack(
+        children: [
+          Container(
+            width: screenWidth,
+            height: screenHeight,
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.topCenter,
+                stops: const [0.2, 0.9],
+                colors: [
+                  darkGrey,
+                  lightGrey,
+                ],
+              ),
+            ),
+            padding: const EdgeInsets.only(left: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _textLoginRotated(context),
+                const SizedBox(height: 56),
+                _textRegisterRotated(context),
               ],
             ),
           ),
-          padding: const EdgeInsets.only(left: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _textLoginRotated(context),
-              const SizedBox(height: 56),
-              _textRegisterRotated(context),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 64, bottom: 48),
-          decoration: BoxDecoration(
-            color: lightGrey,
-            gradient: LinearGradient(
-              begin: Alignment.bottomLeft,
-              end: Alignment.topRight,
-              stops: const [0.1, 0.9],
-              colors: [
-                darkGrey,
-                lightGrey,
-              ],
+          Container(
+            margin: const EdgeInsets.only(left: 64, bottom: 48),
+            decoration: BoxDecoration(
+              color: lightGrey,
+              gradient: LinearGradient(
+                begin: Alignment.bottomLeft,
+                end: Alignment.topRight,
+                stops: const [0.1, 0.9],
+                colors: [
+                  darkGrey,
+                  lightGrey,
+                ],
+              ),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(40),
+                bottomLeft: Radius.circular(40),
+              ),
             ),
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(40),
-              bottomLeft: Radius.circular(40),
-            ),
-          ),
-          child: Stack(
-            children: [
-              _imageBackground(context),
-              Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(left: 24, right: 24, top: 64),
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // _imageBanner(),
-                      _textRegister(),
-                      const CustomTextFieldOutline(
-                        text: 'Name',
-                        icon: Icons.person_outlined,
-                        margin: EdgeInsets.only(top: 32, bottom: 8),
-                      ),
-                      const CustomTextFieldOutline(
-                        text: 'Lastname',
-                        icon: Icons.person_2_outlined,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                      ),
-                      const CustomTextFieldOutline(
-                        text: 'Email',
-                        icon: Icons.email_outlined,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                      ),
-                      const CustomTextFieldOutline(
-                        text: 'Phone',
-                        icon: Icons.phone_outlined,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                      ),
-                      const CustomTextFieldOutline(
-                        text: 'Password',
-                        icon: Icons.lock_outline,
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                      ),
-                      const CustomTextFieldOutline(
-                        text: 'Confirm Password',
-                        icon: Icons.lock_outline,
-                        margin: EdgeInsets.only(top: 8, bottom: 32),
-                      ),
-                      CustomButton(
-                        text: 'Create User',
-                        onPressed: () {},
-                      ),
-                      _textOr(),
-                      _textAlreadyHaveAccount(context),
-                    ],
+            child: Stack(
+              children: [
+                _imageBackground(context),
+                Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(left: 24, right: 24, top: 64),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _textRegister(),
+                        CustomTextFieldOutline(
+                          text: 'Name',
+                          icon: Icons.person_outlined,
+                          margin: const EdgeInsets.only(top: 32, bottom: 8),
+                          onChanged: (text) {
+                            context.read<RegisterBloc>().add(
+                                  NameChanged(
+                                    name: BlocFormItem(value: text),
+                                  ),
+                                );
+                          },
+                          validator: (value) {
+                            return context
+                                .read<RegisterBloc>()
+                                .state
+                                .name
+                                .error;
+                          },
+                        ),
+                        CustomTextFieldOutline(
+                          text: 'Lastname',
+                          icon: Icons.person_2_outlined,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          onChanged: (text) {
+                            context.read<RegisterBloc>().add(
+                                  LastNameChanged(
+                                    lastName: BlocFormItem(value: text),
+                                  ),
+                                );
+                          },
+                          validator: (value) {
+                            return context
+                                .read<RegisterBloc>()
+                                .state
+                                .lastName
+                                .error;
+                          },
+                        ),
+                        CustomTextFieldOutline(
+                          text: 'Email',
+                          icon: Icons.email_outlined,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          onChanged: (text) {
+                            context.read<RegisterBloc>().add(
+                                  EmailChanged(
+                                    email: BlocFormItem(value: text),
+                                  ),
+                                );
+                          },
+                          validator: (value) {
+                            return state?.email.error;
+                          },
+                        ),
+                        CustomTextFieldOutline(
+                          text: 'Phone',
+                          icon: Icons.phone_outlined,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          onChanged: (text) {
+                            context.read<RegisterBloc>().add(
+                                  PhoneChanged(
+                                    phone: BlocFormItem(value: text),
+                                  ),
+                                );
+                          },
+                          validator: (value) {
+                            return context
+                                .read<RegisterBloc>()
+                                .state
+                                .phone
+                                .error;
+                          },
+                        ),
+                        CustomTextFieldOutline(
+                          text: 'Password',
+                          icon: Icons.lock_outline,
+                          margin: const EdgeInsets.symmetric(vertical: 8),
+                          onChanged: (text) {
+                            context.read<RegisterBloc>().add(
+                                  PasswordChanged(
+                                    password: BlocFormItem(value: text),
+                                  ),
+                                );
+                          },
+                          validator: (value) {
+                            return context
+                                .read<RegisterBloc>()
+                                .state
+                                .password
+                                .error;
+                          },
+                        ),
+                        CustomTextFieldOutline(
+                          text: 'Confirm Password',
+                          icon: Icons.lock_outline,
+                          margin: const EdgeInsets.only(top: 8, bottom: 32),
+                          onChanged: (text) {
+                            context.read<RegisterBloc>().add(
+                                  ConfirmPasswordChanged(
+                                    confirmPassword: BlocFormItem(value: text),
+                                  ),
+                                );
+                          },
+                          validator: (value) {
+                            return context
+                                .read<RegisterBloc>()
+                                .state
+                                .confirmPassword
+                                .error;
+                          },
+                        ),
+                        CustomButton(
+                          text: 'Create User',
+                          onPressed: () {
+                            if (state!.formKey!.currentState!.validate()) {
+                              context.read<RegisterBloc>().add(FormSubmit());
+                              // context.read<RegisterBloc>().add(FormReset());
+                            }
+                          },
+                        ),
+                        _textOr(),
+                        _textAlreadyHaveAccount(context),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -131,12 +230,8 @@ class RegisterContent extends StatelessWidget {
   }
 
   Widget _imageBackground(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-
     return Container(
       alignment: Alignment.center,
-      // width: screenSize.width * 1.5,
-      // margin: EdgeInsets.only(top: screenSize.height * 0.01),
       child: Image.asset(
         'assets/img/car_pin.png',
         opacity: const AlwaysStoppedAnimation(0.2),
@@ -158,7 +253,7 @@ class RegisterContent extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, 'login');
+            Navigator.pushReplacementNamed(context, 'login');
           },
           child: const Text(
             'Login',
@@ -202,15 +297,14 @@ class RegisterContent extends StatelessWidget {
     );
   }
 
-  Widget _imageBanner() {
-    return Container(
-      // alignment: Alignment.centerRight,
-      margin: EdgeInsets.only(top: 48),
-      width: double.infinity,
-      height: 176,
-      child: Image.asset('assets/img/car_white.png'),
-    );
-  }
+  // Widget _imageBanner() {
+  //   return Container(
+  //     margin: const EdgeInsets.only(top: 48),
+  //     width: double.infinity,
+  //     height: 176,
+  //     child: Image.asset('assets/img/car_white.png'),
+  //   );
+  // }
 
   Widget _textLoginRotated(BuildContext context) {
     return GestureDetector(
@@ -222,10 +316,8 @@ class RegisterContent extends StatelessWidget {
         child: Text(
           'Login',
           style: TextStyle(
-            // color: Color(0xFF4B4B4B),
             color: Color(0XFFCECECE),
             fontSize: 24,
-            // fontWeight: FontWeight.bold,
           ),
         ),
       ),
@@ -238,7 +330,6 @@ class RegisterContent extends StatelessWidget {
       child: Text(
         'Register',
         style: TextStyle(
-          // color: Color(0xFF4B4B4B),
           color: Color(0XFFCECECE),
           fontSize: 24,
           fontWeight: FontWeight.bold,

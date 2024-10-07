@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_bloc.dart';
+import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_state.dart';
 import 'package:indriver_clone/presentation/pages/auth/register/register_content.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -11,8 +14,14 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: RegisterContent(),
+    return Scaffold(
+      body: BlocBuilder<RegisterBloc, RegisterState>(
+        builder: (context, state) {
+          return RegisterContent(
+            state: state,
+          );
+        },
+      ),
     );
   }
 }

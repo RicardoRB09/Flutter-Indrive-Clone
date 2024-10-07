@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:indriver_clone/presentation/pages/auth/login/bloc/login_bloc.dart';
@@ -16,6 +18,7 @@ class LoginContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+
     Color darkGrey = const Color(0xFF4B4B4B);
     Color lightGrey = const Color(0XFFCECECE);
 
@@ -105,7 +108,6 @@ class LoginContent extends StatelessWidget {
                         return context.read<LoginBloc>().state.password.error;
                       },
                     ),
-                    // const Spacer(),
                     SizedBox(
                       height: screenHeight * 0.2,
                     ),
@@ -115,9 +117,8 @@ class LoginContent extends StatelessWidget {
                         if (state!.formKey!.currentState!.validate()) {
                           context.read<LoginBloc>().add(FormSubmit());
                         } else {
-                          print('Form invalid');
+                          log('Form invalid');
                         }
-
                         context.read<LoginBloc>().add(FormSubmit());
                       },
                     ),
@@ -239,7 +240,7 @@ class LoginContent extends StatelessWidget {
   Widget _textRegisterRotated(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'register');
+        Navigator.pushReplacementNamed(context, 'register');
       },
       child: const RotatedBox(
         quarterTurns: 1,

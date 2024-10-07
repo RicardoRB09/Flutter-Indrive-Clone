@@ -15,7 +15,7 @@ class LoginState extends Equatable {
 
   LoginState copyWith({
     BlocFormItem? email,
-    BlocFormItem? password,
+    BlocFormItem? password, 
     GlobalKey<FormState>? formKey,
   }) {
     return LoginState(

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:indriver_clone/presentation/pages/auth/login/bloc/login_event.dart';
@@ -37,8 +39,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     });
 
     on<FormSubmit>((event, emit) {
-      print('Email : ${state.email.value}');
-      print('Password : ${state.password.value}');
+      log('Email : ${state.email.value}');
+      log('Password : ${state.password.value}');
     });
   }
 }
