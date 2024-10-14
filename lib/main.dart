@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:indriver_clone/bloc_providers.dart';
+import 'package:indriver_clone/injection.dart';
 import 'package:indriver_clone/presentation/pages/auth/login/login_page.dart';
 import 'package:indriver_clone/presentation/pages/auth/register/register_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await configureDependencies();
   runApp(const MyApp());
 }
 
@@ -18,6 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: blocProviders,
       child: MaterialApp(
+        builder: FToastBuilder(),
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(

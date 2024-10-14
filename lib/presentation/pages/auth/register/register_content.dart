@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_bloc.dart';
@@ -7,7 +5,6 @@ import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_ev
 import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_state.dart';
 import 'package:indriver_clone/presentation/utils/bloc_form_item.dart';
 import 'package:indriver_clone/presentation/widgets/custom_button.dart';
-import 'package:indriver_clone/presentation/widgets/custom_text_field.dart';
 import 'package:indriver_clone/presentation/widgets/custom_text_field_outline.dart';
 
 class RegisterContent extends StatelessWidget {
@@ -253,7 +250,7 @@ class RegisterContent extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushReplacementNamed(context, 'login');
+            Navigator.popAndPushNamed(context, 'login');
           },
           child: const Text(
             'Login',
@@ -309,7 +306,7 @@ class RegisterContent extends StatelessWidget {
   Widget _textLoginRotated(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'login');
+        Navigator.popAndPushNamed(context, 'login');
       },
       child: const RotatedBox(
         quarterTurns: 1,

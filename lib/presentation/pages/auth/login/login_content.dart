@@ -150,7 +150,7 @@ class LoginContent extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, 'register');
+            Navigator.popAndPushNamed(context, 'register');
           },
           child: const Text(
             'Register',
@@ -240,7 +240,7 @@ class LoginContent extends StatelessWidget {
   Widget _textRegisterRotated(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushReplacementNamed(context, 'register');
+        Navigator.popAndPushNamed(context, 'register');
       },
       child: const RotatedBox(
         quarterTurns: 1,
