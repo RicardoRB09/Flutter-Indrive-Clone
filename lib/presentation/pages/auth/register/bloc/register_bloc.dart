@@ -1,15 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:indriver_clone/domain/use_cases/auth/auth_use_cases.dart';
+import 'package:indriver_clone/domain/utils/resource.dart';
 import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_event.dart';
 import 'package:indriver_clone/presentation/pages/auth/register/bloc/register_state.dart';
 import 'package:indriver_clone/presentation/utils/bloc_form_item.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
+  AuthUseCases authUseCases;
   final formKey = GlobalKey<FormState>();
 
-  RegisterBloc() : super(const RegisterState()) {
+  RegisterBloc(this.authUseCases) : super(const RegisterState()) {
     on<RegisterInitEvent>(
       (event, emit) {
         emit(
@@ -116,17 +117,35 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       },
     );
 
-    on<FormSubmit>((event, emit) {
-      log('Name: ${state.name.value}');
-      log('Lastname: ${state.lastName.value}');
-      log('Email: ${state.email.value}');
-      log('Phone: ${state.phone.value}');
-      log('Password: ${state.password.value}');
-      log('Password Confirm: ${state.confirmPassword.value}');
+    on<FormSubmit>((event, emit) async {
+      print('Name: ${state.name.value}');
+      print('Lastname: ${state.lastName.value}');
+      print('Email: ${state.email.value}');
+      print('Phone: ${state.phone.value}');
+      print('Password: ${state.password.value}');
+      print('Password Confirm: ${state.confirmPassword.value}');
+
+      emit(
+        state.copyWith(
+          response: Loading(),
+          formKey: formKey,
+        ),
+      );
+
+      Resource response = await authUseCases.register.run(state.toUser());
+
+      emit(
+        state.copyWith(
+          response: response,
+          formKey: formKey,
+        ),
+      );
     });
 
-    // on((event, emit) {
-    //   state.formKey?.currentState?.reset();
-    // });
+    on<FormReset>(
+      (event, emit) {
+        state.formKey?.currentState?.reset();
+      },
+    );
   }
 }

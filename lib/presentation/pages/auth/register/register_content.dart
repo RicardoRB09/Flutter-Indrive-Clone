@@ -94,11 +94,7 @@ class RegisterContent extends StatelessWidget {
                                 );
                           },
                           validator: (value) {
-                            return context
-                                .read<RegisterBloc>()
-                                .state
-                                .name
-                                .error;
+                            return state?.name.error;
                           },
                         ),
                         CustomTextFieldOutline(
@@ -113,11 +109,7 @@ class RegisterContent extends StatelessWidget {
                                 );
                           },
                           validator: (value) {
-                            return context
-                                .read<RegisterBloc>()
-                                .state
-                                .lastName
-                                .error;
+                            return state?.lastName.error;
                           },
                         ),
                         CustomTextFieldOutline(
@@ -147,11 +139,7 @@ class RegisterContent extends StatelessWidget {
                                 );
                           },
                           validator: (value) {
-                            return context
-                                .read<RegisterBloc>()
-                                .state
-                                .phone
-                                .error;
+                            return state?.phone.error;
                           },
                         ),
                         CustomTextFieldOutline(
@@ -166,11 +154,7 @@ class RegisterContent extends StatelessWidget {
                                 );
                           },
                           validator: (value) {
-                            return context
-                                .read<RegisterBloc>()
-                                .state
-                                .password
-                                .error;
+                            return state?.password.error;
                           },
                         ),
                         CustomTextFieldOutline(
@@ -185,11 +169,7 @@ class RegisterContent extends StatelessWidget {
                                 );
                           },
                           validator: (value) {
-                            return context
-                                .read<RegisterBloc>()
-                                .state
-                                .confirmPassword
-                                .error;
+                            return state?.confirmPassword.error;
                           },
                         ),
                         CustomButton(

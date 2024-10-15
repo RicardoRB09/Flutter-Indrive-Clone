@@ -4,36 +4,36 @@ abstract class RegisterEvent {}
 
 class RegisterInitEvent extends RegisterEvent {}
 
-class NameChanged extends RegisterEvent {
+class NameChanged extends RegisterInitEvent {
   final BlocFormItem name;
   NameChanged({required this.name});
 }
 
-class LastNameChanged extends RegisterEvent {
+class LastNameChanged extends RegisterInitEvent {
   final BlocFormItem lastName;
   LastNameChanged({required this.lastName});
 }
 
-class EmailChanged extends RegisterEvent {
+class EmailChanged extends RegisterInitEvent {
   final BlocFormItem email;
   EmailChanged({required this.email});
 }
 
-class PhoneChanged extends RegisterEvent {
+class PhoneChanged extends RegisterInitEvent {
   final BlocFormItem phone;
   PhoneChanged({required this.phone});
 }
 
-class PasswordChanged extends RegisterEvent {
+class PasswordChanged extends RegisterInitEvent {
   final BlocFormItem password;
   PasswordChanged({required this.password});
 }
 
-class ConfirmPasswordChanged extends RegisterEvent {
+class ConfirmPasswordChanged extends RegisterInitEvent {
   final BlocFormItem confirmPassword;
   ConfirmPasswordChanged({required this.confirmPassword});
 }
 
-class FormSubmit extends RegisterEvent {}
+class FormSubmit extends RegisterInitEvent {}
 
-class FormReset extends RegisterEvent {}
+class FormReset extends RegisterInitEvent {}
